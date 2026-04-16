@@ -1,0 +1,1 @@
+websocket + jpa + amqp
