@@ -1,3 +1,68 @@
 spring:
+  config:
+    import: optional:file:./.env[.properties]
   application:
     name: notification-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/notification_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    open-in-view: false
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    listener:
+      simple:
+        acknowledge-mode: auto
+
+server:
+  port: ${SERVER_PORT:8086}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# ---- Notification / Email Config ----
+notification:
+  mail:
+    # Resend API Key — điền vào env khi chạy thực tế
+    resend-api-key: ${RESEND_API_KEY}
+    # From email — phải khớp domain đã xác minh trên Resend
+    from: ${MAIL_FROM:Lumière <noreply@quochuy9.id.vn>}
+    # Base URL của frontend — dùng để tạo link verify email, reset password
+    frontend-base-url: ${FRONTEND_BASE_URL:http://localhost:5173}
+
+  rabbitmq:
+    # Critical Exchange (OTP, Verify Email)
+    critical-exchange: critical.exchange
+    # Non-critical Exchange (Order, Payment)
+    notification-exchange: notification.exchange
+    # Routing Keys
+    routing:
+      email-verify: email.verify
+      email-otp: email.otp
+      email-order: email.order
+      email-payment: email.payment
+    # Queue names
+    queues:
+      email-verify: email.verify.queue
+      email-otp: email.otp.queue
+      email-order: email.order.queue
+      email-payment: email.payment.queue
