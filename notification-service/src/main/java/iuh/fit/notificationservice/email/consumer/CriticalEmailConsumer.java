@@ -23,8 +23,7 @@ public class CriticalEmailConsumer {
     public CriticalEmailConsumer(
             ResendEmailService emailService,
             TemplateEngine templateEngine,
-            @Value("${notification.mail.frontend-base-url}") String frontendBaseUrl
-    ) {
+            @Value("${notification.mail.frontend-base-url}") String frontendBaseUrl) {
         this.emailService = emailService;
         this.templateEngine = templateEngine;
         this.frontendBaseUrl = frontendBaseUrl;
@@ -43,12 +42,12 @@ public class CriticalEmailConsumer {
             String text = String.format(
                     "Xin chào %s,\n\nCảm ơn bạn đã đăng ký tài khoản tại Lumière. Vui lòng xác nhận email bằng cách truy cập liên kết sau:\n%s\n\nNếu bạn không thực hiện yêu cầu này, hãy bỏ qua email này.\n\nTrân trọng,\nLumière Cosmetics",
                     event.fullName(),
-                    verificationLink
-            );
+                    verificationLink);
 
             emailService.sendEmail(event.email(), "Xác nhận tài khoản Lumière", html, text);
         } catch (Exception e) {
-            log.error("[CriticalEmail] Failed to process VERIFY event for email={}: {}", event.email(), e.getMessage(), e);
+            log.error("[CriticalEmail] Failed to process VERIFY event for email={}: {}", event.email(), e.getMessage(),
+                    e);
         }
     }
 
@@ -69,8 +68,7 @@ public class CriticalEmailConsumer {
             String text = String.format(
                     "Xin chào %s,\n\nMã của bạn là: %s\n\nMã này sẽ hết hạn sau 5 phút.\nNếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.\n\nTrân trọng,\nLumière Cosmetics",
                     event.fullName(),
-                    event.otpCode()
-            );
+                    event.otpCode());
 
             emailService.sendEmail(event.email(), subject, html, text);
         } catch (Exception e) {
