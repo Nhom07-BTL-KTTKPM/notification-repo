@@ -1,0 +1,75 @@
+spring:
+  config:
+    import: optional:file:./.env[.properties]
+  application:
+    name: notification-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    open-in-view: false
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    listener:
+      simple:
+        acknowledge-mode: ${SPRING_RABBITMQ_LISTENER_ACK_MODE}
+
+auth:
+  jwt:
+    issuer: ${AUTH_JWT_ISSUER}
+    secret: ${AUTH_JWT_SECRET}
+
+server:
+  port: ${SERVER_PORT}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
+  instance:
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
+    ip-address: ${EUREKA_INSTANCE_IP_ADDRESS}
+    hostname: ${EUREKA_INSTANCE_HOSTNAME}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# ---- Notification / Email Config ----
+notification:
+  mail:
+    # Resend API Key — điền vào env khi chạy thực tế
+    resend-api-key: ${RESEND_API_KEY}
+    # From email — phải khớp domain đã xác minh trên Resend
+    from: ${MAIL_FROM}
+    # Base URL của frontend — dùng để tạo link verify email, reset password
+    frontend-base-url: ${FRONTEND_BASE_URL}
+
+  rabbitmq:
+    # Critical Exchange (OTP, Verify Email)
+    critical-exchange: ${NOTIFICATION_RABBITMQ_CRITICAL_EXCHANGE}
+    # Non-critical Exchange (Order, Payment)
+    notification-exchange: ${NOTIFICATION_RABBITMQ_NOTIFICATION_EXCHANGE}
+    # Routing Keys
+    routing:
+      email-verify: ${NOTIFICATION_RABBITMQ_ROUTING_EMAIL_VERIFY}
+      email-otp: ${NOTIFICATION_RABBITMQ_ROUTING_EMAIL_OTP}
+      email-order: ${NOTIFICATION_RABBITMQ_ROUTING_EMAIL_ORDER}
+      email-payment: ${NOTIFICATION_RABBITMQ_ROUTING_EMAIL_PAYMENT}
+    # Queue names
+    queues:
+      email-verify: ${NOTIFICATION_RABBITMQ_QUEUE_EMAIL_VERIFY}
+      email-otp: ${NOTIFICATION_RABBITMQ_QUEUE_EMAIL_OTP}
+      email-order: ${NOTIFICATION_RABBITMQ_QUEUE_EMAIL_ORDER}
+      email-payment: ${NOTIFICATION_RABBITMQ_QUEUE_EMAIL_PAYMENT}
