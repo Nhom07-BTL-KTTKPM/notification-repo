@@ -21,6 +21,11 @@ spring:
       simple:
         acknowledge-mode: auto
 
+auth:
+  jwt:
+    issuer: ${AUTH_JWT_ISSUER:auth-service}
+    secret: ${AUTH_JWT_SECRET:NUQyuZhoBd6u6O6dAP30Rgu5bqv5TdzpKreGhZGExSaHXEQIM3kicw9uptSaJP9Q}
+
 server:
   port: ${SERVER_PORT:8086}
 
