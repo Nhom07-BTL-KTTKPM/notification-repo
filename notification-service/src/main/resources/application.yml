@@ -4,39 +4,41 @@ spring:
   application:
     name: notification-service
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/notification_db}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
-    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
     open-in-view: false
   rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
     listener:
       simple:
-        acknowledge-mode: auto
+        acknowledge-mode: ${SPRING_RABBITMQ_LISTENER_ACK_MODE}
 
 auth:
   jwt:
-    issuer: ${AUTH_JWT_ISSUER:auth-service}
-    secret: ${AUTH_JWT_SECRET:NUQyuZhoBd6u6O6dAP30Rgu5bqv5TdzpKreGhZGExSaHXEQIM3kicw9uptSaJP9Q}
+    issuer: ${AUTH_JWT_ISSUER}
+    secret: ${AUTH_JWT_SECRET}
 
 server:
-  port: ${SERVER_PORT:8086}
+  port: ${SERVER_PORT}
 
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka/}
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
   instance:
-    prefer-ip-address: true
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS}
+    ip-address: ${EUREKA_INSTANCE_IP_ADDRESS}
+    hostname: ${EUREKA_INSTANCE_HOSTNAME}
 
 management:
   endpoints:
@@ -50,24 +52,24 @@ notification:
     # Resend API Key — điền vào env khi chạy thực tế
     resend-api-key: ${RESEND_API_KEY}
     # From email — phải khớp domain đã xác minh trên Resend
-    from: ${MAIL_FROM:Lumière <noreply@quochuy9.id.vn>}
+    from: ${MAIL_FROM}
     # Base URL của frontend — dùng để tạo link verify email, reset password
-    frontend-base-url: ${FRONTEND_BASE_URL:http://localhost:5173}
+    frontend-base-url: ${FRONTEND_BASE_URL}
 
   rabbitmq:
     # Critical Exchange (OTP, Verify Email)
-    critical-exchange: critical.exchange
+    critical-exchange: ${NOTIFICATION_RABBITMQ_CRITICAL_EXCHANGE}
     # Non-critical Exchange (Order, Payment)
-    notification-exchange: notification.exchange
+    notification-exchange: ${NOTIFICATION_RABBITMQ_NOTIFICATION_EXCHANGE}
     # Routing Keys
     routing:
-      email-verify: email.verify
-      email-otp: email.otp
-      email-order: email.order
-      email-payment: email.payment
+      email-verify: ${NOTIFICATION_RABBITMQ_ROUTING_EMAIL_VERIFY}
+      email-otp: ${NOTIFICATION_RABBITMQ_ROUTING_EMAIL_OTP}
+      email-order: ${NOTIFICATION_RABBITMQ_ROUTING_EMAIL_ORDER}
+      email-payment: ${NOTIFICATION_RABBITMQ_ROUTING_EMAIL_PAYMENT}
     # Queue names
     queues:
-      email-verify: email.verify.queue
-      email-otp: email.otp.queue
-      email-order: email.order.queue
-      email-payment: email.payment.queue
+      email-verify: ${NOTIFICATION_RABBITMQ_QUEUE_EMAIL_VERIFY}
+      email-otp: ${NOTIFICATION_RABBITMQ_QUEUE_EMAIL_OTP}
+      email-order: ${NOTIFICATION_RABBITMQ_QUEUE_EMAIL_ORDER}
+      email-payment: ${NOTIFICATION_RABBITMQ_QUEUE_EMAIL_PAYMENT}
