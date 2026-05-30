@@ -10,7 +10,7 @@
     </parent>
     <groupId>iuh.fit</groupId>
     <artifactId>notification-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>notification-service</name>
     <description>Notification Service — Email, WebSocket, Event Consumer</description>
 
@@ -86,7 +86,7 @@
         <dependency>
             <groupId>iuh.fit</groupId>
             <artifactId>shared-library</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!-- Lombok -->
@@ -170,4 +170,16 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Nhom07-BTL-KTTKPM/shared-library-repo</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
 </project>
